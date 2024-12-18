@@ -55,12 +55,16 @@ export function main() {
 
   do {
     chamarMenu();
+
     opcao = readlinesync.questionInt("");
 
     if (opcao === 0) {
       console.log(colors.fg.redstrong, "Obrigado Por usar o FarmaSV");
+
       about();
+
       console.log(colors.reset, "");
+
       process.exit(0);
     }
 
@@ -132,9 +136,14 @@ export function main() {
       case 3:
         console.log(
           colors.fg.whitestrong,
-          "\n\nConsultar Produto por ID\n\n",
+          "\n\nConsultar Produto por ID - por número do ID\n\n",
           colors.reset
         );
+
+        console.log("Digite o ID do produto: ");
+        idProduto = readlinesync.questionInt("");
+
+        produtos.consultarProdutoPorID(idProduto);
 
         keyPress();
         break;
@@ -146,6 +155,58 @@ export function main() {
           colors.reset
         );
 
+        console.log("Digite o ID do Produto");
+        idProduto = readlinesync.questionInt("");
+
+        let produto = produtos.buscarNoArray(idProduto);
+
+        if (produto != null) {
+          console.log("Digite o nome do produto: ");
+          nomeProduto = readlinesync.question("");
+
+          console.log("Digite o preço do produto: ");
+          precoProduto = readlinesync.questionFloat("");
+
+          tipo = produto.tipoProduto;
+
+          switch (tipo) {
+            case 1:
+              console.log("Digite o medicamento genérico do produto: ");
+              medicamentoGenerico = readlinesync.question("");
+
+              produtos.atualizarProduto(
+                new Medicamento(
+                  idProduto,
+                  nomeProduto,
+                  tipo,
+                  precoProduto,
+                  medicamentoGenerico
+                )
+              );
+              break;
+
+            case 2:
+              console.log("Digite a Fragância do produto: ");
+              produtoFragancia = readlinesync.question("");
+
+              produtos.atualizarProduto(
+                new Cosmetico(
+                  idProduto,
+                  nomeProduto,
+                  tipo,
+                  precoProduto,
+                  produtoFragancia
+                )
+              );
+              break;
+          }
+        } else {
+          console.log(
+            colors.fg.red,
+            `\nO produto com ID - ${idProduto} não foi encontrado!`,
+            colors.reset
+          );
+        }
         keyPress();
         break;
 
@@ -155,6 +216,11 @@ export function main() {
           "\nDeletar Produto\n\n",
           colors.reset
         );
+
+        console.log("Digite o número do Produto: ");
+        idProduto = readlinesync.questionInt("");
+
+        produtos.deletarProduto(idProduto);
 
         keyPress();
         break;
@@ -167,17 +233,17 @@ export function main() {
 }
 
 function chamarMenu() {
-  console.log(colors.bg.green, colors.fg.blackstrong);
+  console.log(colors.bg.blue, colors.fg.blackstrong);
   console.log("\n");
   console.log("    ╔════════════════════════════════════════════════════╗");
   console.log("    ║                     FARMASV                        ║");
   console.log("    ╠════════════════════════════════════════════════════╣");
-  console.log("    ║          1- Criar Produto                          ║");
-  console.log("    ║          2- Listar todos os Produtos               ║");
-  console.log("    ║          3- Consulta produto por ID                ║");
-  console.log("    ║          4- Atualizar Produto                      ║");
-  console.log("    ║          5- Deletar Produto                        ║");
-  console.log("    ║          0- Sair                                   ║");
+  console.log("    ║          1 - Criar Produto                         ║");
+  console.log("    ║          2 - Listar todos os Produtos              ║");
+  console.log("    ║          3 - Consulta produto por ID               ║");
+  console.log("    ║          4 - Atualizar Produto                     ║");
+  console.log("    ║          5 - Deletar Produto                       ║");
+  console.log("    ║          0 - Sair                                  ║");
   console.log("    ╚════════════════════════════════════════════════════╝");
   console.log("Digite a opção desejada: ", colors.reset);
 }
